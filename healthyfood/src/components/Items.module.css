@@ -1,0 +1,11 @@
+.kgItem{
+    background-color: khaki;
+}
+.kgSpan{
+
+    font-weight:600;
+    color: rgb(113, 19, 176);
+}
+.itemBtn{
+    float: right;
+}

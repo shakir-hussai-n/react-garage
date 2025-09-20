@@ -1,0 +1,8 @@
+.contBody{
+    width: 50%;
+    min-width: 300px;
+    border: 1px solid rgb(119, 106, 106);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 15px;
+}
