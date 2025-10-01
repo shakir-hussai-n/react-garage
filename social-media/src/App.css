@@ -1,0 +1,21 @@
+.sideBar{
+  min-height: 550px;  
+
+}
+.app-container{
+    display : flex;
+   
+
+}
+.content{
+ width: 100%;
+
+}
+.postCard{
+
+  margin: 30px 20px;
+}
+.formContainer{
+
+  margin: 10px 20px;
+}
