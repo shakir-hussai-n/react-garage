@@ -1,89 +1,90 @@
-import {createContext,useReducer} from "react";
+import { createContext, useReducer } from "react";
 
 
 
 export const PostListData = createContext({
-     postList:[],
-     addPost: () => { },
-     deletePost: () => { }
+  postList: [],
+  addPost: () => { },
+  deletePost: () => { },
+  InitialPost: () => { }
 
 });
 
-const postListReducer = (currPostList,action) => {
+const postListReducer = (currPostList, action) => {
 
-  switch(action.type){
-    case "DELETE_ITEM":
-      return  currPostList.filter(deleteItems => deleteItems.id !== action.payload) ;
 
-    case "ADD_ITEM":
-      const   addItems = [action.payload,...currPostList] 
+  if (action.type === "DELETE_ITEM") {
 
-      return addItems;
+    return currPostList.filter(deleteItems => deleteItems.id !== action.payload);
 
-      default:
-      return currPostList;
-    
+  } else if (action.type === "ADD_ITEM") {
+
+    const addItems = [action.payload, ...currPostList]
+
+    return addItems;
+
+  } else if (action.type === "POST_INITIAL_ITEMS") {
+
+    return action.payload;
+  } else {
+
+    return currPostList;
   }
-  
-  
 
 }
 
-const PostListProvider = ({children}) => {
 
-    const [postList, dispatchPostList] = useReducer(postListReducer, DEFAULT_POST_LIST)
-    
-    
-    
-  const addPost = (userId, postTitle, postContent, reaction, tags) => {
-      
-    dispatchPostList({type : "ADD_ITEM",
-      payload : {
+const PostListProvider = ({ children }) => {
+
+  const [postList, dispatchPostList] = useReducer(postListReducer, [])
+
+
+  const InitialPost = (posts) => {
+
+    dispatchPostList({
+      type: "POST_INITIAL_ITEMS",
+      payload: posts 
+    })
+
+  }
+
+
+  const addPost = (userId, postTitle, postContent, rct, tags) => {
+
+    dispatchPostList({
+      type: "ADD_ITEM",
+      payload: {
         id: Date.now(),
         title: postTitle,
         body: postContent,
-        reactions: reaction,
+        rct: rct,
         userId: userId,
         tags: tags,
-      }});
+      }
+    });
   };
 
-    const deletePost = (postId) => {
-      const deleteObject = {
-        type: "DELETE_ITEM",
-        payload: postId
-      }
-      dispatchPostList(deleteObject)
-      
+  const deletePost = (postId) => {
+    const deleteObject = {
+      type: "DELETE_ITEM",
+      payload: postId
     }
+    dispatchPostList(deleteObject)
 
-
-    return <PostListData.Provider value = {{postList,
-        addPost,
-        deletePost
-    }}>
-             {children}
-    </PostListData.Provider>
-}
-
-const DEFAULT_POST_LIST = [
-  {
-    id: "1",
-    title: "Going to Munbai",
-    body: "Hi Friends, I am going to Mumbai for my vacations. Hope to enjoy a lot, Pease out.",
-    reactions:2,
-    userId: "user-9",
-    tags: ["vacation","Mumbai","Enjoying"]
-  },
-  {
-    id:"2",
-    title: "Pass ho bhai",
-    body: "4 saal ki masti k baad bhi ho gaye hain pass. Hard to believe.",
-    reactions: 15,
-    userId: "user-12",
-    tags: ["Graduating","Unbelievable"]
   }
 
-];
+
+  return <PostListData.Provider value={{
+    postList,
+    InitialPost,
+    addPost,
+    deletePost,
+
+  }}>
+    {children}
+  </PostListData.Provider>
+}
+
+
 
 export default PostListProvider;
